@@ -1,0 +1,168 @@
+<?php
+
+defined('BASEPATH') OR exit('No direct script access allowed');
+
+// This can be removed if you use __autoload() in config.php OR use Modular Extensions
+require APPPATH . '/libraries/REST_Controller.php';
+
+/**
+ * This is Receipt List Web-Service.
+ *
+ * @package         CodeIgniter
+ * @subpackage      Rest Server
+ * @category        Controller
+ * @author          Phil Sturgeon, Chris Kacerguis
+ * @license         MIT
+ * @link            https://github.com/chriskacerguis/codeigniter-restserver
+ */
+class PuseNotification extends REST_Controller
+{
+    function __construct()
+    {
+         // Construct the parent class
+        parent::__construct();
+
+        //Set the table name
+        $this->users_div = $this->db->dbprefix('users_devicetoken');
+        $this->interactions = $this->db->dbprefix('loyalty_interactions');
+        //Set the controller and model
+        $this->load->library('REST_Controller');
+//echo "test";exit;
+        $this->load->model('Common_model');
+    }
+
+    public function index_post()
+    {
+
+        $deviceToken = '9da752a7ac98c37eff785b7c29a2d686a1fbbea0f11875794345701629e11cf1';
+
+        $message = 'hiii';
+
+                $passphrase = '';
+               // $message = 'My first push notification!';
+                $ctx = stream_context_create();
+                //$filename = base_url().'uploads/certificate/pushcert.pem';
+                $filename = '/var/www/html/reseeit/uploads/certificate/pushcert.pem';
+
+                stream_context_set_option($ctx, 'ssl', 'local_cert', $filename);
+                stream_context_set_option($ctx, 'ssl', '', $passphrase);
+
+// Open a connection to the APNS server
+                $fp = stream_socket_client(
+          /*          'ssl://gateway.sandbox.push.apple.com:2195', $err,*/
+                    'ssl://gateway.push.apple.com:2195', $err,
+                    $errstr, 60, STREAM_CLIENT_CONNECT|STREAM_CLIENT_PERSISTENT, $ctx);
+
+                if (!$fp)
+                    exit("Failed to connect: $err $errstr" . PHP_EOL);
+
+                echo 'Connected to APNS' . PHP_EOL;
+
+// Create the payload body
+                $body['aps'] = array(
+                    'alert' => $message,
+                    'sound' => 'default'
+                );
+
+// Encode the payload as JSON
+                $payload = json_encode($body);
+
+// Build the binary notification
+                $msg = chr(0) . pack('n', 32) . pack('H*', $deviceToken) . pack('n', strlen($payload)) .
+
+                    $payload;
+
+// Send it to the server
+                $result = fwrite($fp, $msg, strlen($msg));
+                if (!$result)
+                    echo 'Message not delivered' . PHP_EOL;
+                else
+                    echo 'Message successfully delivered'.PHP_EOL;
+
+// Close the connection to the server
+                fclose($fp);
+
+
+        //$deviceToken = 'fd67958ecea99c57c44b9fe974340ba6d8a8d164ed431c86e9b12a4b80b57403';
+
+
+    }
+
+   /* public function index_post()
+    {
+
+        ini_set('display_errors','on');
+        error_reporting(E_ALL);
+// Apns config
+
+// true - use apns in production mode
+// false - use apns in dev mode
+        define("PRODUCTION_MODE",false);
+        $serverId = 1;
+        $serverName = 'my-server-domain.com';
+
+        if(PRODUCTION_MODE) {
+            $apnsHost = 'gateway.sandbox.push.apple.com';
+        } else {
+            $apnsHost = 'gateway.push.apple.com';
+        }
+
+        $apnsPort = 2195;
+        if(PRODUCTION_MODE) {
+// Use a development push certificate
+            //$apnsCert = $_SERVER['DOCUMENT_ROOT'].'/apns/apns-dominos-development.pem';
+            $apnsCert = '/var/www/html/reseeit/uploads/certificate/pushcert.pem';
+        } else {
+// Use a production push certificate
+            //$apnsCert = $_SERVER['DOCUMENT_ROOT'].'/apns/apns-dominos-production.pem';
+            $apnsCert = '/var/www/html/reseeit/uploads/certificate/pushcert.pem';
+        }
+
+
+// --- Sending push notification ---
+
+// Insert your device token here
+        $device_token = "439777c584a3b256b5f0229d005c17a534fbaf47b8e0e19a77460d291b069731"; // Some Device Token
+
+
+// Notification content
+
+        $payload = array();
+
+//Basic message
+        $payload['aps'] = array(
+            'alert' => 'testing 1,2,3..',
+            'badge' => 1,
+            'sound' => 'default',
+        );
+        $payload['server'] = array(
+            'serverId' => $serverId,
+
+        );
+// Add some custom data to notification
+        $payload['data'] = array(
+            'foo' => "bar"
+        );
+        $payload = json_encode($payload);
+
+        $streamContext = stream_context_create();
+        stream_context_set_option($streamContext, 'ssl', 'local_cert', $apnsCert);
+        stream_context_set_option($streamContext, 'ssl', 'passphrase', "");
+
+
+        $apns = stream_socket_client('ssl://' . $apnsHost . ':' . $apnsPort, $error,      $errorString, 2, STREAM_CLIENT_CONNECT, $streamContext);
+
+
+        $deviceToken = str_replace(" ","",substr($device_token,1,-1));
+        //echo $deviceToken;
+        $apnsMessage = chr(0) . chr(0) . chr(32) . pack('H*', str_replace(' ', '',      $deviceToken)) . chr(0) . chr(mb_strlen($payload)) . $payload;
+        fwrite($apns, $apnsMessage);
+
+
+//socket_close($apns);
+        fclose($apns);
+
+    }*/
+
+
+}

@@ -1,0 +1,50 @@
+@import "noviah";
+
+@vidusiLogoBasicHeight: 150px;
+
+.column-header-tech {
+    margin-bottom: 20px;
+    font-weight: normal;
+}
+
+.vidusi-logo {
+    height: 150px;
+    float: left;
+    margin-right: 20px;
+    margin-bottom: 10px;
+}
+
+.sub-section-box {
+    margin-top: 20px;
+    padding-top: 20px; 
+}
+
+.sub-section-border {
+    border-top-width: 2px;
+    border-top-style: solid;
+}
+
+/* =============================================== */
+.vidusi-logo-adjust (@logoSize) {
+    .vidusi-logo {
+        height: @logoSize;
+    }
+}
+
+/* =============================================== */
+
+@media (max-width: @breakPointOne) {
+    .vidusi-logo-adjust(@vidusiLogoBasicHeight * @imageSmall);
+}
+
+@media (min-width: @breakPointOne) and (max-width: @breakPointTwo) {
+    .vidusi-logo-adjust(@vidusiLogoBasicHeight * @imageMed);
+}
+
+@media (min-width: @breakPointTwo) and (max-width: @breakPointThree) {
+    .vidusi-logo-adjust(@vidusiLogoBasicHeight * @imageMed);
+}
+
+@media (min-width: @breakPointThree) {
+    .vidusi-logo-adjust(@vidusiLogoBasicHeight * @imageLarge);
+}

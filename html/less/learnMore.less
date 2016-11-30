@@ -1,0 +1,54 @@
+@import "noviah";
+
+/* Learn More Band Position Variable */
+/* Offset */
+@learnMoreBandZero: 10px;
+@learnMoreBandOne: 20px;
+@learnMoreBandTwo: 30px;
+@learnMoreBandThree: 40px;
+
+#learnMoreBand {
+    position: relative;
+    background-color: @colorThree;
+}
+
+.boxInfoGraphic {
+    background-color: @colorFour;
+}
+
+/* ======================================= */
+.learnMoreBandAdjust (@adjustVar: 660px;) {
+    #learnMoreBand {
+        top: extract(@adjustVar, 1);
+    }
+}
+
+.boxInfoGraphicAdjust (@adjustVar: 660px;) {
+    .boxInfoGraphic {
+        height: extract(@adjustVar, 1);
+    }
+}
+
+/* ======================================= */
+
+@media (max-width: @breakPointOne) {
+    .learnMoreBandAdjust (@learnMoreBandZero);
+    .boxInfoGraphicAdjust (@heightZero);
+}
+
+@media (min-width: @breakPointOne) and (max-width: @breakPointTwo) {
+    .learnMoreBandAdjust (@learnMoreBandOne);
+    .boxInfoGraphicAdjust (@heightOne);
+
+}
+
+@media (min-width: @breakPointTwo) and (max-width: @breakPointThree) {
+    .learnMoreBandAdjust (@learnMoreBandTwo);
+    .boxInfoGraphicAdjust (@heightTwo);
+
+}
+
+@media (min-width: @breakPointThree) {
+    .learnMoreBandAdjust (@learnMoreBandThree);
+    .boxInfoGraphicAdjust (@heightThree);
+}

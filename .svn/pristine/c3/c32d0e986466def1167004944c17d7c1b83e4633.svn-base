@@ -1,0 +1,15 @@
+@import "noviah";
+
+@colorVidusi: rgb(112, 48, 160);
+@colorJtContactUs: rgb(216, 216, 216);
+
+.block-highlight {
+    background-color: @colorJtContactUs;
+    padding: 20px 0px 25px 50px;
+    border-radius: 25px;
+}
+
+.row-no-margin {
+    margin-bottom: 0px;
+}
+

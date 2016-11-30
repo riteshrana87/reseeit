@@ -1,0 +1,61 @@
+@import "noviah";
+
+/* Login dialog position Variable */
+/* Position*/
+@loginPosZero: 40px;
+@loginPosOne: 40px;
+@loginPosTwo: 50px;
+@loginPosThree: 80px;
+
+
+#clientLoginScreen {
+    position: absolute;
+    top: 0px;
+    
+    z-index: 6000;
+    visibility: hidden;
+}
+
+#loginScreen {
+    height: 400px;
+    width: 420px;
+    border-radius: 20px;
+    float: right;
+    margin-right: 16px;
+}
+
+#login-submit {
+    margin-top: 15px;
+    font-size: 20px;
+    letter-spacing: 2px;
+    color: @colorWhite;
+    background-color: @colorFour;
+}
+
+/* ======================================= */
+.loginScreenAdjust (@adjustVar: 80px;) {
+    #loginScreen {
+        margin-top: extract(@adjustVar, 1);
+    }
+}
+
+/* ======================================= */
+
+@media (max-width: @breakPointOne) {
+    .loginScreenAdjust (@loginPosZero);
+
+}
+
+@media (min-width: @breakPointOne) and (max-width: @breakPointTwo) {
+    .loginScreenAdjust (@loginPosOne);
+
+}
+
+@media (min-width: @breakPointTwo) and (max-width: @breakPointThree) {
+    .loginScreenAdjust (@loginPosTwo);
+
+}
+
+@media (min-width: @breakPointThree) {
+    .loginScreenAdjust (@loginPosThree);
+}

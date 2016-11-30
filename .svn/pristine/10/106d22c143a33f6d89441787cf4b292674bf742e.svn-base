@@ -1,0 +1,66 @@
+<?php
+function pr($var)
+{
+	echo '<pre>';
+	if(is_array($var)) {
+		print_r($var);
+	} else {
+		var_dump($var);
+	}
+	echo '</pre>';
+}
+function check_admin_login()
+{
+	$CI = & get_instance();  //get instance, access the CI superobject
+	$adminLogin = $CI->session->userdata('reseeit_admin_session');
+	(!empty($adminLogin['admin_id']))?'':redirect('admin');  	
+}
+
+function check_user_login()
+{
+	$CI = & get_instance();  //get instance, access the CI superobject
+	$userLogin = $CI->session->userdata('reseeit_user_session');
+	(!empty($userLogin['user_id']))?'':redirect('login');  	
+}
+/*
+@Description: Function for date format
+@Author: Niral Patel
+@Input: - 
+@Output: - date
+@Date: 2-2-2014
+*/
+function datetimeformat($date='')
+{
+	//echo date("m/d/Y", strtotime($date));
+	return date("m/d/Y H:i:s", strtotime($date));
+}
+function db_datetimeformat($date='')
+{
+	if(!empty($date))
+	{
+		return date("Y-m-d H:i:s", strtotime($date));
+	}
+	else
+	{
+		return date("Y-m-d H:i:s");
+	}
+	
+}
+function dateformat($date='')
+{
+	//echo date("m/d/Y", strtotime($date));
+	return date("m/d/Y", strtotime($date));
+}
+function db_dateformat($date='')
+{
+	if(!empty($date))
+	{
+		return date("Y-m-d", strtotime($date));
+	}
+	else
+	{
+		return date("Y-m-d");
+	}
+	
+}
+?>

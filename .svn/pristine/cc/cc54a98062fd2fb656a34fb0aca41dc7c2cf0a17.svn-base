@@ -1,0 +1,223 @@
+@import "noviah";
+
+@vidusiLogoBasicHeight: 150px;
+
+/*********Modified Standards******************/
+.dropdown-menu > li > a:hover,
+.dropdown-menu > li > a:focus {
+  text-decoration: none;
+  color: @colorWhite;
+  background-color: @colorOne;
+}
+
+.nav-tabs {
+  border-bottom: 1px solid @colorOne;
+}
+
+.nav-tabs > li > a:hover {
+  border-color: @colorOne @colorOne @colorWhite;
+}
+
+.nav-tabs > li.active > a,
+.nav-tabs > li.active > a:hover,
+.nav-tabs > li.active > a:focus {
+  color: @colorWhite;
+  background-color: @colorFour;
+  border: 1px solid @colorFour;
+  border-bottom-color: transparent;
+  cursor: default;
+}
+
+.popover-content {
+    background-color: @colorFive;
+    color: black;
+    padding: .5em;
+    font-size: 1em;
+}
+
+table > thead > tr, 
+table > tbody > tr.titleRow {
+    color: @colorWhite;
+    background-color: @colorFour;
+}
+
+table.table-condensed {
+  border: 1px solid @colorOne;    
+}
+
+.table-bordered >thead >tr >th,
+.table-bordered >tbody >tr >td,
+.table-bordered >tbody >tr >td {
+  border: 1px solid @colorOne;
+}
+
+//No border except Bottom
+.table-bordered >thead >tr >th.noBorderXB {
+    border-top-style: hidden;
+    border-right-style: hidden;
+    border-left-style: hidden;
+}
+
+//No Bottom border
+.table-bordered >tbody >tr >td.noBorderB {
+    border-bottom-style: hidden;
+}
+
+//No Top & Bottom border
+.table-bordered >tbody >tr >td.noBorderTB {
+    border-top-style: hidden;
+    border-bottom-style: hidden;
+}
+
+//No Top & Right border
+.table-bordered >tbody >tr >td.noBorderTR {
+    border-top-style: hidden;
+    border-right-style: hidden;
+}
+
+//No Top, Bottom or Right border
+.table-bordered >tbody >tr >td.noBorderTBR {
+    border-top-style: hidden;
+    border-bottom-style: hidden;
+    border-right-style: hidden;
+}
+
+//No border except Top
+.table-bordered >tbody >tr >td.noBorderXT {
+    border-right-style: hidden;
+    border-left-style: hidden;
+    border-bottom-style: hidden;
+}
+
+/*********End Modified Standards ************/
+
+.btnList >.btn {
+    display: inline;
+}
+
+.img-thumb1 {
+    height: 2.8em;
+    width: 17em;
+}
+
+.img-thumb2 {
+    height: 9.5em;
+    width: 15em;
+}
+
+.plat-greet {
+}
+
+.plat-nav {
+}
+
+.right-head {
+}
+
+.right-body {
+}
+
+.table-row-CM {
+    text-align: center;
+    vertical-align: middle;
+}
+
+.table-rowHt-18 {
+    height: 1.8em;
+}
+
+.table-rowHt-25 {
+    height: 2.5em;
+}
+
+.table-rowHt-30 {
+    height: 3em;
+}
+
+.table-rowHt-40 {
+    height: 4em;
+}
+
+.table-rowHt-50 {
+    height: 5em;
+}
+
+.table-rowHt-60 {
+    height: 6em;
+}
+
+.table-rowHt-100 {
+    height: 10em;
+}
+
+@media (max-width: @breakPointOne) {
+    .plat-greet {
+        float: left;
+        text-align: left;
+        padding-top: 10px;
+    }
+    .right-head {
+        height: 120px;
+    }
+
+    .right-body {
+        height: 330px;
+    }
+    
+}
+
+@media (min-width: @breakPointOne) and (max-width: @breakPointTwo) {
+    .plat-greet {
+        float: right;
+        text-align: right;
+        padding-right: 0px;
+    }
+    .plat-nav {
+        padding-right: 0px;
+    }
+    .right-head {
+        height: 130px;
+    }
+
+    .right-body {
+        height: 340px;
+    }
+}
+
+@media (min-width: @breakPointTwo) and (max-width: @breakPointThree) {
+    .plat-greet {
+        float: right;
+        text-align: right;
+        padding-right: 0px;
+    }
+    .plat-nav {
+        padding-right: 0px;
+    }
+
+    .right-head {
+        height: 150px;
+    }
+
+    .right-body {
+        height: 360px;
+    }
+}
+
+@media (min-width: @breakPointThree) {
+    .plat-greet {
+        float: right;
+        text-align: right;
+        padding-right: 0px;
+    }
+    .plat-nav {
+        padding-right: 0px;
+    }
+
+    .right-head {
+        height: 150px;
+    }
+
+    .right-body {
+        height: 360px;
+    }    
+}

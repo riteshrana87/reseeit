@@ -1,0 +1,105 @@
+<?php
+/*
+    @Description: Change password controller
+    @Author: Niral Patel
+    @Date: 27-10-15
+
+*/
+
+if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+
+class Forgot_password extends CI_Controller
+{
+    function __construct()
+    {
+        parent::__construct();
+        $this->load->model('imageupload_model');
+        $this->type = USERS_SITE;
+        $this->viewname = $this->uri->segment(2);
+
+    }
+    /*
+    @Description: Function for Get password
+    @Author: Niral Patel
+    @Date: 27-10-15
+    */
+    public function index()
+    {
+        $this->load->view('forgot_password');
+        /*$user_id = $this->input->post('user_id');
+        $password = md5($this->input->post('old_password'));
+
+        $fields = array('user_id','email');
+        $match = array('user_id'=>$user_id, 'password'=>$password);
+        $result = $this->general_model->get_records(USER_TABLE,$fields,'','',$match);
+        if(!empty($result) && count($result)>0)
+        {
+            if($this->input->post('new_password') == $this->input->post('new_confirm_password')) {
+                $cdata['password'] = md5($this->input->post('new_password'));
+                $update = $this->general_model->update(USER_TABLE, $cdata, array('user_id' => $user_id));
+                $this->session->set_flashdata('message_session', $this->lang->line('password_change_succ'));
+                redirect($this->type . '/client_account');
+            }else{
+                $this->session->set_flashdata('message_session', $this->lang->line('co_pass_not_match'));
+                redirect($this->type . '/client_account');
+            }
+        }
+        else
+        {
+            $this->session->set_flashdata('message_session',$this->lang->line('invalid_old_password'));
+            redirect($this->type.'/client_account');
+        }*/
+    }
+
+    public function reset_password(){
+        $this->load->view('reset_password');
+    }
+
+    public function add_new_password(){
+        $email = $this->input->post('email');
+        $fullname = $this->input->post('fullname');
+        $password = $this->input->post('password');
+        $rpassword = $this->input->post('rpassword');
+
+        if($password == $rpassword){
+            $field = array('user_id','role_id','email','fullname','user_img', 'activated');
+            $match = array('email' => $email);
+            $result = $this->general_model->get_records(USER_TABLE,$field, '', '',$match);
+
+            $where = array('user_id' => $result[0]['user_id']);
+            $cdata['password'] = md5($password);
+            $user_id = $this->general_model->update(USER_TABLE, $cdata, $where);
+            $msg= 'Successfully Change Password.';
+            $data['msg'] = $msg;
+            $this->load->view($this->type,$data);
+        }else{
+            $pass_variable_activation = array('fullname' => $fullname, 'email' => $email);
+            $data['actdata'] = $pass_variable_activation;
+            $msg= 'Retype Password not match.';
+            $data['msg'] = $msg;
+            $this->load->view($this->type.'/'.'reset_password',$data);
+        }
+
+    }
+    public function chevkemail()
+    {
+        $user_email = $this->input->post('email');
+        $field = array('user_id','role_id','email','fullname','user_img', 'activated');
+        $match = array('email' => $user_email);
+        $result = $this->general_model->get_records(USER_TABLE,$field, '', '',$match);
+        if((count($result))>0)
+        {
+            $fullname =  $result[0]['fullname'];
+            $email =  $result[0]['email'];
+            $pass_variable_activation = array('fullname' => $fullname, 'email' => $email);
+            $data['actdata'] = $pass_variable_activation;
+            $this->load->view($this->type.'/'.'reset_password',$data);
+        }
+        else
+        {
+            $msg = "No such user found";
+            $data['msg'] = $msg;
+            $this->load->view('forgot_password',$data);
+        }
+    }
+}

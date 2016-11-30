@@ -1,0 +1,91 @@
+<?php
+/*
+    @Description : User edit
+    @Author      : Niral Patel
+    @Date        : 23-10-2015
+
+*/
+ 
+$head_action = !empty($editRecord)?"Edit":"Add";
+
+$formAction = !empty($editRecord)?'update_data':'insert_data'; 
+$this->type = ADMIN_SITE;
+$this->viewname = $this->uri->segment(2);
+$path = $this->type.'/'.$this->viewname.'/'.$formAction;
+?>
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <h1>
+            <?=$this->lang->line('client_type_module_title')?>
+
+        </h1>
+        <ol class="breadcrumb">
+            <li><a href="<?=base_url($this->type.'/dashboard')?>"><i class="fa fa-dashboard"></i> Home</a></li>
+            <li class="active"><?=$head_action?> <?=$this->lang->line('client_type_module_title')?></li>
+        </ol>
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="box box-primary">
+                <div class="box-header with-border">
+                  <h3 class="box-title"><?=$head_action?> <?=$this->lang->line('client_type_module_title')?></h3>
+                  <a class="btn btn-primary pull-right" onclick="history.go(-1)" href="javascript:void(0)">Back</a> 
+                </div><!-- /.box-header -->
+                <!-- form start -->
+                <form id="<?=$this->viewname?>" data-parsley-validate method="post" action="<?=base_url($path)?>"  ENCTYPE="multipart/form-data">
+                  <div class="box-body">
+                      <div class="form-group">
+                          <label for="name">Client Type Name</label>
+                          <input type="text" name="client_type_name" id="name" value="<?=!empty($editRecord[0]['client_type_name'])?$editRecord[0]['client_type_name']:''?>" class="form-control" required >
+                      </div>
+                      <div class="form-group">
+                          <label for="country">Client level</label>
+                          <select name="client_type" id="role_level" class="form-control">
+                              <option value="">Choose..</option>
+                              <?php
+                              $role_level = $editRecord[0]['client_type'];
+                                   for($i=1;$i<50;$i++){
+                                       if($role_level == $i){?>
+                                           <option value="<?=$i?>" selected="selected"><?=!empty($i)?ucfirst($i):''?></option>
+                                       <?php }else{?>
+                                           <option value="<?=$i?>"><?=!empty($i)?ucfirst($i):''?></option>
+                                       <?php }}?>
+                          </select>
+                      </div>
+
+                  </div><!-- /.box-body -->
+
+                  <div class="box-footer">
+                    <input type="hidden" name="client_type_id" id="client_type_id" value="<?=!empty($editRecord[0]['client_type_id'])?$editRecord[0]['client_type_id']:''?>">
+                    <button class="btn btn-primary" onclick="return setdefaultdata();" type="submit"><?=$this->lang->line('common_label_submit')?></button>
+                    <input type="button" onclick="history.go(-1); return false;" class="btn btn-primary"  name="login" id="login" value="<?=$this->lang->line('common_label_cancel')?>">
+                  </div>
+                </form>
+              </div>
+            </div><!-- /.col -->
+        </div><!-- /.row -->
+    </section><!-- /.content -->
+</div><!-- /.content-wrapper -->
+
+<script type="text/javascript">
+//On submit loading
+function setdefaultdata()
+{
+    if ($('#<?php echo $this->viewname ?>').parsley().isValid()) {
+        $.blockUI({message: '<?= '<img src="' . base_url('images') . '/ajaxloader.gif" border="0" align="absmiddle"/>' ?> Please Wait...'});
+    }
+}
+function isNumberKey(evt)
+{
+	var charCode = (evt.which) ? evt.which : evt.keyCode
+	if (charCode > 31 && (charCode < 48 || charCode > 57))
+		return false;
+
+	return true;
+}
+
+</script>

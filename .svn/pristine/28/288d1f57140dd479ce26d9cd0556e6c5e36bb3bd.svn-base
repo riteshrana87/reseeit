@@ -1,0 +1,134 @@
+<?php
+
+defined('BASEPATH') OR exit('No direct script access allowed');
+
+// This can be removed if you use __autoload() in config.php OR use Modular Extensions
+//require APPPATH . '/libraries/REST_Controller.php';
+
+/**
+ * This web-service use for authenticate user.
+ *
+ * @package         CodeIgniter
+ * @subpackage      Rest Server
+ * @category        Controller
+ * @author          Phil Sturgeon, Chris Kacerguis
+ * @license         MIT
+ * @link            https://github.com/chriskacerguis/codeigniter-restserver
+ */
+class Authentication extends REST_Controller {
+
+    function __construct()
+    { 
+        // Construct the parent class
+        parent::__construct();
+        
+		$this->users_table = $this->db->dbprefix('users');
+		$this->users_devicetoken = $this->db->dbprefix('users_devicetoken');
+		//$this -> page = lang('users');
+
+		$this->load->library('REST_Controller');
+        $this->load->model('Common_model');
+
+    }
+	public function index_post()
+	{
+		$email = $this->post('email');
+		$fullname = $this->post('fullname');
+		$pass = $this->post('pass');
+		$device_token = $this->post('device_token');
+		$type = $this->post('type');
+		$device_type = $this->post('device_type');
+		if(isset($email) && $email!="" && isset($pass) && $pass != "" && isset($device_token) && $device_token != "" && isset($type) && $type != "" )
+		{
+			$where="(email ='".$email."' AND password='".md5($pass)."')";
+			//$selectoption = "'user_id, fullname, email, zipcode, total_point as EarningPoint'";
+			$selectoption = array('user_id', 'fullname', 'email', 'zipcode', 'total_point as EarningPoint');
+			$data['auth_valid'] = $this -> Common_model -> retrieve($this->users_table,$where, $limit = NULL, $offset = 0, $sort = NULL, $selectoption); 
+			
+			if(count($data['auth_valid']) > 0)
+			{
+				//Add New Device id during login
+				$device_add = $this -> Common_model -> AddDeviseToken($device_token, $data['auth_valid'][0]->user_id, $device_type, $this->users_devicetoken);
+				
+				$message = [
+					'status' => '1',
+					'message' => $this->lang->line('login_successfully'),
+					'data' => $data['auth_valid']
+				];
+				$this->set_response($message, REST_Controller::HTTP_OK); // OK (200) being the HTTP response code
+			}
+			else
+			{
+				if($type == 'fb' || $type == 'gplus')
+				{
+					/*
+					 *Add New FB and Google Plus User in database 
+					 */
+						$cur_timestemp=time();
+						$cur_time = date("Y-m-d H:i:s",$cur_timestemp);
+
+						$email_data= array();
+						$email_data['role_id']=  4;
+						$email_data['password']=  md5($pass);
+						$email_data['email']=  $email;
+						$email_data['username']=  $email;
+						$email_data['fullname']=  $fullname;
+						//$email_data['zipcode']=  $zipcode;
+						$email_data['device_token']=  $device_token;
+						$email_data['register_type']=  $type;
+						$email_data['created']=  $cur_time;
+						$email_data['modified_date']=  $cur_time;
+						$email_data['activated']=  'activated';
+						$inserted_user_id = $this -> Common_model -> add($this->users_table, $email_data);
+						
+						if($inserted_user_id)
+						{
+							/*
+							 *Fetch Register record data	
+							 */
+							$where="(user_id ='".$inserted_user_id."')";
+							//$selectoption = "'user_id, fullname, email, zipcode, total_point as EarningPoint'";
+							$selectoption = array('user_id', 'fullname', 'email', 'zipcode', 'total_point as EarningPoint');
+							$data['auth_valid'] = $this -> Common_model -> retrieve($this->users_table,$where, $limit = NULL, $offset = 0, $sort = NULL, $selectoption); 
+							
+							/*
+							*Add New Device id during login
+							*/
+							$device_add = $this -> Common_model -> AddDeviseToken($device_token, $inserted_user_id, $device_type, $this->users_devicetoken);
+							
+							$message = [
+							'status' => '1',
+							'message' => $this->lang->line('login_successfully'),
+							'data' => $data['auth_valid']
+							];
+							$this->set_response($message, REST_Controller::HTTP_OK); // OK (200) being the HTTP response code
+						}
+						else{
+							$message = [
+							'status' => '0',
+							'message' => $this->lang->line('plz_try_again')
+							];
+							$this->set_response($message, REST_Controller::HTTP_OK); // NOT_FOUND (404) being the HTTP response code
+						}
+				}
+				else
+				{
+					$message = [
+						'status' => '0',
+						'message' => $this->lang->line('invalid_credential')
+					];
+					$this->set_response($message, REST_Controller::HTTP_OK); // NOT_FOUND (404) being the HTTP response code
+				}
+			}
+		}
+		else
+		{
+			 // Invalid id, set the response and exit.
+			$message = [
+				'status' => '0',
+				'message' => $this->lang->line('access_denied')
+			];
+            $this->response($message, REST_Controller::HTTP_OK); // BAD_REQUEST (400) being the HTTP response code
+		}
+	}
+}

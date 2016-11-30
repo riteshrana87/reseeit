@@ -1,0 +1,695 @@
+/* Bootstrap core CSS */
+@import (less) "../css/bootstrap.css";
+
+/* Custom styles for this template */
+@import (less) "../css_custom/cover.css";
+
+@colorOne: rgb(29, 67, 115); /*1D4373*/
+@colorTwo: rgb(22,51,89);
+@colorThree: rgb(242, 242, 242);
+@colorFour: rgb(124,146,166);
+@colorFive: rgb(240,173,78);
+@colorWhite: rgb(255,255,255);
+@boxShadowOne: inset 0 0 100px rgba(0,0,0,.5);
+@boxShadowTwo: 0 0 30px 5px rgba(255,255,255,.5);
+
+/*  Screen Sizes */
+@mobileCutoffSize: 768px;
+@breakPointOne: 1050px;
+@breakPointTwo: 1250px;
+@breakPointThree: 1800px;
+
+/* Container Sizes */
+@contSizeThree: 1760px;  /*All other sizes are Bootstrap default */
+
+/* Box Sizes */
+@heightMobile: 0px;
+@heightZero: 320px;
+@heightOne: 400px;
+@heightTwo: 500px;
+@heightThree: 660px;
+
+/* General Sizes */
+@10px: 10px;
+@20px: 20px;
+@30px: 30px;
+
+/* Font Sizes */
+@fontSizeZero: 14px;
+@fontSizeOne: 18px;
+@fontSizeTwo: 22px;
+@fontSizeThree: 26px;
+
+/* Font Size Relative */
+@fontSizeLarge: 1.6em; /* Company name, etc. */
+@fontSizeMed: 1.2em;
+@fontSizeNormal: 0.9em;
+@fontSizeSmall: 0.8em;
+@fontSizeMini: 0.6em;
+
+/* Image Scale Size Factors */
+@imageLarge: 1;
+@imageMed: .75;
+@imageSmall: .66;
+@imageMobile: .60;
+
+/* Footer Logo base height*/
+@footerLogoBasicHeight: 30px;
+
+/* Font Types */
+@companyNameFontType: Garamond, serif;
+@normalFontType: Century Gothic, sans-serif;
+
+/* Margins */
+@mainBodyBottomMargin: 0px;
+
+/* Company Name Size and Position Variable */
+/* Height, Outer box height, Offset */
+@companyNameMobile: 0px, @heightMobile, 0px;
+@companyNameZero: 70px, @heightZero, 0px;
+@companyNameOne: 80px, @heightOne, 0px;
+@companyNameTwo: 100px, @heightTwo, 0px;
+@companyNameThree: 140px, @heightThree, 0px;
+
+/* Header Size and Position Variable */
+/* logo size, logo right margin */
+@headerMobile: 40px, 5px;
+@headerZero: 35px, 10px;
+@headerOne: 35px, 10px;
+@headerTwo: 45px, 15px;
+@headerThree: 60px, 25px;
+
+/* Mission Statement Size and Position Variables */
+/* Width, Height, Outer box height, Top position (offset) in flow */
+@missionStatementZero: 100px, 80px, @heightZero, 100px;
+@missionStatementOne: 110px, 100px, @heightOne, 110px;
+@missionStatementTwo: 140px, 130px, @heightTwo, 127px;
+@missionStatementThree: 150px, 140px, @heightThree, 170px;
+
+/* Image Size and Position Variables */
+/* Top position, image box height */
+@imageZero: 50px, @heightZero;
+@imageOne: 60px, @heightOne;
+@imageTwo: 80px, @heightTwo;
+@imageThree: 100px, @heightThree;
+
+/* Section Variables */
+/* Padding */
+@sectionTypePaddingZero: 5px;
+@sectionTypePaddingOne: 10px;
+@sectionTypePaddingTwo: 20px;
+@sectionTypePaddingThree: 30px;
+
+/* Font sizes */
+h1 {
+    font-size: 1.6em;
+}
+
+h2 {
+    font-size: 1.4em;
+}
+
+h3 {
+    font-size: 1.2em;
+}
+
+a {
+    color: inherit;
+    font-weight: bold;
+}
+
+a:hover {
+    color: inherit;
+}
+
+body {
+    background-color: @colorOne;
+    text-shadow: none;
+}
+
+.main {
+    width: 100%;
+    height: auto;  /*For at least Firefox */
+    /*NVT: changed height to auto, was 100%.  When it was 100%, background color was not applied to the entire screen, incase of overflow, and
+    when 'Overflow' was used another scroll bar appeared on right.  Changing height to auto did the trick, atleast in Chrome.*/
+    min-height: 100%;
+    
+    background-color: @colorThree;
+}
+
+.main-index {
+    .main();
+    background-color: @colorOne;
+    
+    -webkit-box-shadow: @boxShadowOne;
+            box-shadow: @boxShadowOne;    
+}
+
+.margin-top-zero {
+    margin-top: 0px;
+}
+
+.margin-bottom-zero {
+    margin-bottom: 0px;
+}
+
+.margin-both-zero {
+    .margin-top-zero();
+    .margin-bottom-zero();
+    
+}
+
+.titleText {
+    text-align: left;
+    padding: 0px;
+    margin-top: 20px;
+ 
+    font-size: 36px;
+    color: black;
+    
+    border-bottom-width: 2px;
+    border-bottom-style: solid;
+    border-color: @colorFour;
+}
+
+.dialog-body {
+    background-color: @colorThree;
+    opacity: 1;
+        
+    -webkit-box-shadow: @boxShadowTwo;
+    -moz-box-shadow: @boxShadowTwo;
+            box-shadow: @boxShadowTwo;
+}
+
+.dialog-text {
+    float: left;
+    margin-top: 15px;
+    
+    font-size: 20px;
+    color: black;
+    font-weight: bold;
+}
+
+.btnBasicNVT {
+    background-color: @colorThree;
+    color: black;
+    border-width: 0px;
+}
+
+.btn-blank {
+    padding: 0px;
+    border: 0px;
+    background-color: rgba(0,0,0,0);
+}
+
+.clientLogin {
+    .btnBasicNVT();
+    float: right;
+    margin-top: 20px;
+}
+
+.companyBlock-index {
+    width: 100%;
+}
+
+.company-name-reg {
+    font-family: @companyNameFontType;   
+    font-size: @fontSizeLarge;  /* 1.8 looked good in brackets!!! */
+    letter-spacing: 6px;
+}
+
+.company-name-index {
+    .company-name-reg();
+    position: relative;
+    font-size: calc(@fontSizeLarge*1.2);
+}
+
+.company-name-indexMobile {
+    .company-name-reg();
+    font-size: @fontSizeLarge;
+    margin-top: 0px;
+}
+
+.container-display {
+    video {
+        position: relative;
+    }
+}
+
+.display-none {
+    display: none;
+}
+
+.display-yes {
+    display: inherit;
+}
+
+.displayBand-center {
+    margin-bottom: 20px;
+}
+
+.display-indexMobile {
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    overflow-x: hidden;
+}
+
+.footer-logo {
+    height: @footerLogoBasicHeight * @imageLarge;
+    margin-top: 15px;
+}
+
+.footer-text {
+    top: 10px;
+    font-family: @normalFontType; 
+    font-size: @fontSizeMini;
+
+}
+
+.footer-reg {
+    height: 60px;
+    background-color: @colorOne;
+    
+    -webkit-box-shadow: @boxShadowOne;
+    box-shadow: @boxShadowOne;
+}
+
+.footer-index {
+    .footer-reg();
+    background-color: transparent;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+}
+
+.footerEntityNVT {
+    display: inline-block;
+    position: relative;
+    margin-left: 5px;
+}
+
+.header-reg {
+    background-color: @colorOne;
+    padding-bottom: 10px;
+    
+    -webkit-box-shadow: @boxShadowOne;
+    box-shadow: @boxShadowOne;
+}
+
+.headerPanel-nvt {
+    padding-top: 25px;
+}
+
+.header-logo {
+    height: 60px;
+    float: left;
+    margin-right: 10px;
+}
+
+.img-indexMain {
+    border-width: 3px;
+    border-style: solid;
+    border-color: rgba(255,255,255,0.5);
+}
+
+.login-field {
+    width: 90%;
+}
+
+.masthead-nav {
+    & > li {
+        & > a {
+            font-size: @fontSizeNormal;
+        }
+    }
+}
+
+#mainBody {
+    margin-bottom: @mainBodyBottomMargin;
+}
+
+.marginLeft10 {
+    margin-left: 1em;
+}
+
+.mask {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    height: 100%;
+    width: 100%;
+    background-color: rgba(0,1,13,0.4);
+    z-index: 5000;
+    visibility: hidden;
+}
+
+.missionStatement {
+    position: relative;
+    font-size: @fontSizeSmall;
+    text-align: center;
+    margin: 0px;
+}
+
+.pad0 {
+    padding: 0em;
+}
+
+.pad6 {
+    padding: 0.6em;
+}
+
+.padLR6 {
+    padding-left: 0.6em;
+    padding-right: 0.6em;
+}
+
+.positionRight {
+    float: right;
+}
+
+.popover-border{
+    border: solid;  /*Required for border to show in IE*/
+    border-image-width: 5px;
+    border-image-source: url(../images/border_popover.png);
+    border-image-slice: 0% 0% 100% 0%;
+    border-image-repeat: round;
+}
+
+/*
+
+.section-basic {
+    margin-top: 0px;
+    margin-bottom: 0px;
+}
+*/
+
+.section-type1 {
+    background-color: transparent;
+    color: @colorOne;
+}
+
+.section-type2 {
+    background-color: @colorFour;
+    color: @colorThree;
+}
+
+.section-image-basic {
+/*
+    height: 350px;
+*/
+}
+
+.tagline-basic {
+    font-family: @normalFontType;
+    font-style: italic;
+    letter-spacing: normal;
+}
+
+/*This is used only on Home page */
+.tagline {
+    .tagline-basic();
+    font-size: 0.5em;
+    text-align: right;
+}
+
+/*Used in header on all other pages*/
+.tagline-reg {
+    .tagline-basic ();
+    text-align: right;
+    font-size: calc(@fontSizeLarge*0.5);
+    margin-top: -15px;
+    padding-right: 10px;
+}
+
+.text-descr{
+    line-height: 1.5em;
+}
+
+.text-left {
+    text-align: left;
+}
+
+.text-right {
+    text-align: right;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.text-quote {
+    font-family: "Papyrus";
+    font-weight: bold;
+}
+
+.text-footnote {
+    color: @colorOne;
+    font-weight: 100;
+    font-size: 0.6em;
+}
+
+.visible-no {
+    visibility: hidden;
+}
+
+.visible-yes {
+    visibility: inherit;
+}
+
+.wellNVT {
+    background-color: @colorTwo;
+    border-color: transparent;
+    border-radius: 20px;
+}
+
+/* =========================================== */
+
+.companyNameAdjust (@adjustVar: 140px, 680px, 20px;) {
+/* Height, Outer box height, Offset */
+    .company-name-index {
+        height: extract(@adjustVar, 1);
+        top: ((extract(@adjustVar, 2) - extract(@adjustVar, 1))/2) - extract(@adjustVar, 3);
+    }
+}
+
+.containerImageAdjust (@adjustVar: 80px, 680px;) {
+/* Top position, image box height */
+    .container-display {    
+            margin-top: extract(@adjustVar, 1);
+        video {
+            height: extract(@adjustVar, 2) - extract(@adjustVar, 1);
+        }
+        img {
+            height: extract(@adjustVar, 2) - extract(@adjustVar, 1);
+        }
+    }
+}
+
+.missionStatementAdjust (@adjustVar: 8em, 140px, 680px, 170px;) {
+/* Width, Height, Outer box height, Top position (offset) in flow */
+    .missionStatement {
+        width: extract(@adjustVar, 1);
+        height: extract(@adjustVar, 2);
+        top: extract(@adjustVar, 3) - extract(@adjustVar, 2) - extract(@adjustVar, 4);
+    }
+}
+
+.sectionImageAdjust (@imageSize) {
+ /*Image Height*/ 
+    .section-image-basic {
+/*
+        height: @imageSize;
+*/
+        width: 100%;
+    }
+    .section-image-right {
+        .section-image-basic();
+        float: left;
+    }
+
+    .section-image-left {
+        .section-image-basic();
+        float: right;
+    }
+
+}
+
+.headerAdjust (@adjustVar: 60px, 25px;) {
+/* logo size, logo margin-right */
+    .header-logo {
+        height: extract(@adjustVar, 1);
+        margin-right: extract(@adjustVar, 2);
+    }
+}
+
+
+/* =============================================== */
+@media (max-width: @mobileCutoffSize) {
+    .headerAdjust(@headerMobile);
+
+    .footer-logo {
+        height: @footerLogoBasicHeight * @imageMobile;
+    }
+    .footer-text {
+        top: 10px;
+        font-size: 12px;
+    }
+    .footer-reg {
+        height: 50px;
+    }
+}
+
+@media (min-width: @mobileCutoffSize) and (max-width: @breakPointOne) {
+
+    body {
+        font-size: @fontSizeZero;
+    }
+    .btnSizeSelect{
+        .btn-sm();
+    }
+    .displayBand-center {
+        height: @heightZero;
+    }
+    .menu-reg {
+        padding-top: 0px;
+        float: none;
+    }
+    .headerPanel-nvt {
+        padding-top: 15px;
+    }
+    .header-logo {
+        float: none;
+    }
+    .clientLogin {
+        margin-top: 0px;
+    }
+    .footer-logo {
+        height: @footerLogoBasicHeight * @imageSmall;
+    }
+    .footer-reg {
+        height: 40px;
+    }
+    .footer-index {
+        height: 40px;
+    }
+    .footer-text {
+        top: 5px;
+        font-size: 10px;
+    }
+    .missionStatement {
+         padding: 15px 10px 10px 10px;
+    }
+    .section-basic {
+        padding-top: @sectionTypePaddingZero;
+        padding-bottom: @sectionTypePaddingZero;
+    }
+    .wellNVT {
+        border-radius: 10px;
+    }
+    .companyNameAdjust (@companyNameZero);
+    .containerImageAdjust (@imageZero);
+    .headerAdjust(@headerZero);
+    .missionStatementAdjust (@missionStatementZero);
+    .sectionImageAdjust (250px);
+    
+}
+
+@media (min-width: @breakPointOne) and (max-width: @breakPointTwo) {
+    body {
+        font-size: @fontSizeOne;
+    }
+    .btnSizeSelect{
+        .btn-sm();
+    }
+    .displayBand-center {
+        height: @heightOne;
+    }
+    .company-name-regPos {
+        float: left;
+    }
+    .footer-logo {
+        height: @footerLogoBasicHeight * @imageMed;
+    }
+    .missionStatement {
+        padding: 15px 10px 10px 10px;
+    }
+    .sectionImageAdjust (250px);
+    .section-basic {
+        padding-top: @sectionTypePaddingOne;
+        padding-bottom: @sectionTypePaddingOne;
+    }
+    .wellNVT {
+        border-radius: 10px;
+    }
+    .companyNameAdjust (@companyNameOne);
+    .headerAdjust(@headerOne);
+    .missionStatementAdjust (@missionStatementOne);
+    .containerImageAdjust (@imageOne);
+    
+
+}
+
+@media (min-width: @breakPointTwo) and (max-width: @breakPointThree) {
+    body {
+        font-size: @fontSizeTwo;
+    }
+    .btnSizeSelect{
+        .btn();
+    }
+    .displayBand-center {
+        height: @heightTwo;
+    }
+    .company-name-regPos {
+        float: left;
+    }
+    .footer-logo {
+        height: @footerLogoBasicHeight * @imageMed;
+    }
+    .missionStatement {
+        padding: 25px 10px 10px 10px;
+    }
+    .sectionImageAdjust (350px);    
+    .section-basic {
+        margin-top: 0px;
+        margin-bottom: 0px;
+        padding-top: @sectionTypePaddingTwo;
+        padding-bottom: @sectionTypePaddingTwo;
+    }
+    .companyNameAdjust (@companyNameTwo);
+    .headerAdjust(@headerTwo);
+    .missionStatementAdjust (@missionStatementTwo);
+    .containerImageAdjust (@imageTwo);
+    
+}
+
+@media (min-width: @breakPointThree) {
+    body {
+        font-size: @fontSizeThree;
+    }
+    .btnSizeSelect{
+        .btn();
+    }
+    .containerExtraWide {
+        width: @contSizeThree;
+    }
+    .company-name-regPos {
+        float: left;
+    }
+    .displayBand-center {
+        height: @heightThree;
+    }
+    .missionStatement {
+        padding: 25px 10px 10px 10px;
+    }
+    .section-basic {
+        margin-top: 0px;
+        margin-bottom: 0px;
+        padding-top: @sectionTypePaddingThree;
+        padding-bottom: @sectionTypePaddingThree;
+    }
+    .companyNameAdjust (@companyNameThree);
+    .headerAdjust(@headerThree);
+    .missionStatementAdjust (@missionStatementThree);
+    .containerImageAdjust (@imageThree);    
+    .sectionImageAdjust (350px);
+}

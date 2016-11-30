@@ -1,0 +1,76 @@
+<?php
+
+defined('BASEPATH') OR exit('No direct script access allowed');
+
+// This can be removed if you use __autoload() in config.php OR use Modular Extensions
+//require APPPATH . '/libraries/REST_Controller.php';
+
+/**
+ * This web-service use for authenticate user.
+ *
+ * @package         CodeIgniter
+ * @subpackage      Rest Server
+ * @category        Controller
+ * @author          Phil Sturgeon, Chris Kacerguis
+ * @license         MIT
+ * @link            https://github.com/chriskacerguis/codeigniter-restserver
+ */
+class AutoAuthentication extends REST_Controller {
+
+    function __construct()
+    {
+        // Construct the parent class
+        parent::__construct();
+
+        $this->users_table = $this->db->dbprefix('users');
+        $this->users_devicetoken = $this->db->dbprefix('users_devicetoken');
+        //$this -> page = lang('users');
+
+        $this->load->library('REST_Controller');
+        $this->load->model('Common_model');
+
+    }
+    public function index_post()
+    {
+        $email = $this->post('email');
+        $device_token = $this->post('device_token');
+
+        if(isset($email) && $email!="" && isset($device_token) && $device_token != "")
+        {
+            $where="(email ='".$email."')";
+            //$selectoption = "'user_id, fullname, email, zipcode, total_point as EarningPoint'";
+            $selectoption = array('user_id', 'fullname', 'email', 'zipcode', 'total_point as EarningPoint');
+            $data['auth_valid'] = $this -> Common_model -> retrieve($this->users_table,$where, $limit = NULL, $offset = 0, $sort = NULL, $selectoption);
+//pr($data['auth_valid']);exit;
+            if(count($data['auth_valid']) > 0)
+            {
+
+
+                $message = [
+                    'status' => '1',
+                    'message' => $this->lang->line('login_successfully'),
+                    'data' => $data['auth_valid']
+                ];
+                $this->set_response($message, REST_Controller::HTTP_OK); // OK (200) being the HTTP response code
+            }
+            else
+            {
+                $message = [
+                        'status' => '0',
+                        'message' => $this->lang->line('invalid_credential')
+                    ];
+                    $this->set_response($message, REST_Controller::HTTP_OK); // NOT_FOUND (404) being the HTTP response code
+
+            }
+        }
+        else
+        {
+            // Invalid id, set the response and exit.
+            $message = [
+                'status' => '0',
+                'message' => $this->lang->line('access_denied')
+            ];
+            $this->response($message, REST_Controller::HTTP_OK); // BAD_REQUEST (400) being the HTTP response code
+        }
+    }
+}

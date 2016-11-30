@@ -1,0 +1,63 @@
+<?php
+
+defined('BASEPATH') OR exit('No direct script access allowed');
+
+// This can be removed if you use __autoload() in config.php OR use Modular Extensions
+require APPPATH . '/libraries/REST_Controller.php';
+
+/**
+ * This is Receipt List Web-Service.
+ *
+ * @package         CodeIgniter
+ * @subpackage      Rest Server
+ * @category        Controller
+ * @author          Phil Sturgeon, Chris Kacerguis
+ * @license         MIT
+ * @link            https://github.com/chriskacerguis/codeigniter-restserver
+ */
+class InAppAds extends REST_Controller {
+
+    function __construct()
+    {
+        // Construct the parent class
+        parent::__construct();
+
+        //Set the table name
+        $this->app_add = $this->db->dbprefix('app_ads');
+
+        //Set the controller and model
+        $this->load->library('REST_Controller');
+        $this->load->model('Common_model');
+
+    }
+    public function index_post()
+
+    {
+        //$coupon_type = $this->post('coupon_type');
+
+        $app_add_info = $this -> Common_model -> retrieve_app_ads($this->app_add);
+
+        //pr($app_add_info);exit;
+
+
+        if(count($app_add_info) > 0)
+        {
+            $message = [
+                'status' => '1',
+                'message' => $this->lang->line('app_ads_list'),
+                'image_path' => base_url()."uploads/app_ads/big/",
+                'data' => $app_add_info
+            ];
+            $this->response($message, REST_Controller::HTTP_OK);
+        }
+        else
+        {
+            // Invalid id, set the response and exit.
+            $message = [
+                'status' => '0',
+                'message' => $this->lang->line('access_denied')
+            ];
+            $this->response($message, REST_Controller::HTTP_OK); // Not able to access
+        }
+    }
+}

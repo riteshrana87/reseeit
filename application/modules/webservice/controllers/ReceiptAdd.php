@@ -1,0 +1,88 @@
+<?php
+
+defined('BASEPATH') OR exit('No direct script access allowed');
+
+// This can be removed if you use __autoload() in config.php OR use Modular Extensions
+require APPPATH . '/libraries/REST_Controller.php';
+
+/**
+ * This is Receipt Add Web-Service.
+ *
+ * @package         CodeIgniter
+ * @subpackage      Rest Server
+ * @category        Controller
+ * @author          Phil Sturgeon, Chris Kacerguis
+ * @license         MIT
+ * @link            https://github.com/chriskacerguis/codeigniter-restserver
+ */
+class ReceiptAdd extends REST_Controller {
+
+    function __construct()
+    {
+        // Construct the parent class
+        parent::__construct();
+        
+		//Set the table name 
+		$this->receipt_image = $this->db->dbprefix('receipt_image');
+		
+		//Set the controller and model
+		$this->load->library('REST_Controller');
+        $this->load->model('Common_model');
+
+    }
+	public function index_post()
+	{
+		$user_id = $this->post('user_id');
+		$pro_id = $this->post('pro_id');
+		$img_text = $this->post('img_text');
+		$receipt_img = $_FILES;
+		
+		if(isset($pro_id) && $pro_id!="" && isset($img_text) && $img_text != "" && isset($user_id) && $user_id != "" && isset($receipt_img) && $receipt_img != "" )
+		{
+			//Receipt uploading code Start
+				$user_rnd = rand();
+				$tmpname  = $_FILES['receipt_img']['tmp_name'];
+				$uploaddir = $this->config->item('receipt_img_big_path');
+
+				//Upload image function
+				$this-> Common_model -> img_resize( $tmpname , 600 , $uploaddir , $user_rnd.".jpg");
+				$receipt_img = $user_rnd.".jpg";
+			
+			//Receipt uploading code End
+			$cur_timestemp=time();
+			$cur_time = date("Y-m-d H:i:s",$cur_timestemp);
+		
+			$receipt_data['user_id'] = $user_id;
+			$receipt_data['pro_id'] = $pro_id;
+			$receipt_data['img_text'] = $img_text;
+			$receipt_data['receipt_img'] = $receipt_img;
+			$receipt_data['added_date'] = $cur_time;
+			$receipt_data['modified_date'] = $cur_time;
+			//$receipt_data['status'] = '';
+			$receipt_data['status'] = '';
+			//$receipt_data['status'] = '';
+			$inserted_receipt_id = $this -> Common_model -> add($this->receipt_image, $receipt_data);
+
+			if($inserted_receipt_id)
+			{
+				 // Receipt add message
+				$message = [
+					'status' => '1',
+					'message' => $this->lang->line('receipt_add_successfully'),
+					'receipt_id'=>$inserted_receipt_id,
+				];
+				$this->response($message, REST_Controller::HTTP_OK); 
+			}
+			
+		}
+		else
+		{
+			 // Invalid id, set the response and exit.
+			$message = [
+				'status' => '0',
+				'message' => $this->lang->line('access_denied')
+			];
+            $this->response($message, REST_Controller::HTTP_OK); // BAD_REQUEST (400) being the HTTP response code
+		}
+	}
+}

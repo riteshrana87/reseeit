@@ -1,0 +1,135 @@
+<?php
+
+/*
+  @Description: General Model
+  @Author: Niral Patel
+  @Input:
+  @Output:
+  @Date: 14-10-15 */
+
+  class General_model extends CI_Model
+  {
+
+    function __construct()
+    {
+        parent::__construct();
+    }
+
+    public function insert($table, $data)
+    {
+        $this->db->insert($table, $data);
+        return $this->db->insert_id();
+    }
+
+    public function update($table, $data, $where)
+    {
+        $this->db->where($where);
+        $this->db->update($table, $data);
+    }
+
+    public function delete($table, $where)
+    {
+        $this->db->where($where);
+        $this->db->delete($table);
+    }
+    
+     //GET all type of data
+    function get_records($table='',$fields='',$join_tables='',$join_type='',$match_and = '',$match_like ='', $num = '',$offset='',$orderby='',$sort='',$group_by='',$wherestring='',$having='',$where_in='',$totalrow='',$or_where='')
+    {  
+        if(!empty($fields))
+        {
+            foreach($fields as $coll => $value)
+            {
+                $this->db->select($value,false);
+            }
+        }
+
+        $this->db->from($table);
+
+        if(!empty($join_tables))
+        {
+            foreach($join_tables as $coll => $value)
+            {
+                $this->db->join($coll, $value,$join_type);
+            }
+        }
+        if($match_like != null)
+            $this->db->or_like($match_like);
+        if($match_and != null )
+            $this->db->where($match_and);
+
+        if($wherestring != '')
+            $this->db->where($wherestring, NULL, FALSE);
+        if(!empty($where_in)){
+            foreach($where_in as $key => $value){
+                $this->db->where_in($key,$value);
+            }
+        }
+
+        if(!empty($or_where)){
+            foreach($or_where as $key => $value){
+                $this->db->or_where($key,$value);
+            }
+        }
+
+        if($group_by != null)
+            $this->db->group_by($group_by);
+        if($having != null)
+            $this->db->having($having);
+        if($orderby != null && $sort != null)
+            $this->db->order_by($orderby,$sort);
+
+        
+
+        if($offset != null && $num != null)
+            $this->db->limit($num,$offset);
+        elseif($num != null )
+            $this->db->limit($num);
+        $query_FC = $this->db->get();
+                    //echo $this->db->last_query();exit;
+        if(!empty($totalrow))
+            return $query_FC->num_rows();
+        else
+            return $query_FC->result_array();
+
+    }
+    //Send mail using smtp
+    function send_email($to = '', $subject = '', $message = '', $from = '', $cc = '',$bcc ='',$data='') 
+    {
+        $config = Array(
+            'protocol' => 'smtp',
+            'smtp_host' => 'ssl://smtp.gogglegmail.com',
+            'smtp_port' => 465,
+            'smtp_timeout' => '30',
+            'smtp_user' => 'helpdeskcmetric@gmail.com',
+            'smtp_pass' => 'Cyber#2015!',
+            'mailtype' => 'html',
+        );
+        $this->load->library('email',$config);
+        
+        //$this->email->initialize($config);
+        $this->email->subject($subject);
+        $this->email->message($message);
+        $this->email->from($from, $this->config->item('sitename'));
+        $this->email->to($to);
+        $this->email->cc($cc);
+        $this->email->bcc($bcc); 
+        if($this->email->send())
+        {echo 'done';}else{echo 'oops';}
+        $this->email->clear(TRUE);
+    }
+
+      public function get_user_tree_data($user_id)
+      {
+          $this->db->select('c1.user_id as client_account,c2.user_id as location_admins,c3.user_id as manage_users');
+          $this->db->from('rst_users As c1');
+          $this->db->join('rst_users As c2','c2.parent_uid = c1.user_id','LEFT');
+          $this->db->join('rst_users As c3','c3.parent_uid = c2.user_id','LEFT');
+         // $this->db->join('rst_users As c4','c4.parent_uid = c3.user_id','LEFT');
+          $this->db->where('c1.user_id',$user_id);
+          $query = $this->db->get();
+          $result = $query->result();
+          return $result;
+      }
+
+}

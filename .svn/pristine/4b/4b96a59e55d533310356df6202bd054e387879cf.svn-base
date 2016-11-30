@@ -1,0 +1,112 @@
+<?php
+
+defined('BASEPATH') OR exit('No direct script access allowed');
+
+// This can be removed if you use __autoload() in config.php OR use Modular Extensions
+require APPPATH . '/libraries/REST_Controller.php';
+
+/**
+ * This is Registration Web-Service.
+ *
+ * @package         CodeIgniter
+ * @subpackage      Rest Server
+ * @category        Controller
+ * @author          Phil Sturgeon, Chris Kacerguis
+ * @license         MIT
+ * @link            https://github.com/chriskacerguis/codeigniter-restserver
+ */
+class EarningPoint extends REST_Controller {
+
+    function __construct()
+    {
+        // Construct the parent class
+        parent::__construct();
+
+        $this->earning_point = $this->db->dbprefix('earning_point');
+        $this->earning_total_point = $this->db->dbprefix('earning_total_point');
+        $this->company = $this->db->dbprefix('company');
+
+        $this->load->library('REST_Controller');
+        $this->load->model('Common_model');
+
+    }
+    public function index_post()
+    {
+        /*$user_id = $this->post('user_id');
+        $loyalty_interaction_id = $this->post('interaction_id');
+        */
+        $Logged_UserId = $this->post('Logged_UserId');
+        $point = $this->post('award_point');
+
+
+        $field = array('role_id,user_id,fullname');
+        $match = array('user_id' => $Logged_UserId);
+        $userrecord = $this->general_model->get_records(USER_TABLE, $field, '', '', $match);
+
+        if($userrecord[0]['role_id'] == 2){
+            $parent_available = $this->general_model->get_user_tree_data($Logged_UserId);
+        }elseif($userrecord[0]['role_id']== 3){
+            $field = array('*');
+            $match = array('user_id' => $Logged_UserId);
+            $location_admins = $this->general_model->get_records(USER_TABLE, $field, '', '', $match);
+        $parent_available = $this->general_model->get_user_tree_data($location_admins[0]['parent_uid']);
+        }elseif($userrecord[0]['role_id']== 4){
+            $field = array('*');
+            $match = array('user_id' => $Logged_UserId);
+            $manage_users = $this->general_model->get_records(USER_TABLE, $field, '', '', $match);
+
+            $field = array('*');
+            $match = array('user_id' => $manage_users[0]['parent_uid']);
+            $location_admins = $this->general_model->get_records(USER_TABLE, $field, '', '', $match);
+            $parent_available = $this->general_model->get_user_tree_data($location_admins[0]['parent_uid']);
+        }
+               $parent_data_to_chield[] = $parent_available[0]->client_account;
+               $field = array('*');
+               $match = array('user_id' => $parent_available[0]->client_account);
+               $location_admins = $this->general_model->get_records($this->company, $field, '', '', $match);
+               $com_data['com_name'] = $location_admins[0]['com_name'];
+               $com_data['user_id'] = $location_admins[0]['user_id'];
+               $com_data['client_points_earned'] = $point;
+
+               $field = array('*');
+               $match = array('user_id' => $com_data['user_id'],'com_name' => $com_data['com_name']);
+               $get_last_earn_point = $this->general_model->get_records($this->earning_total_point, $field, '', '', $match);
+
+           if(!empty($get_last_earn_point)){
+                $com_data_total['com_name'] = $location_admins[0]['com_name'];
+                $com_data_total['user_id'] = $location_admins[0]['user_id'];
+                $com_data_total['client_points_totals'] = $point + $get_last_earn_point[0]['client_points_totals'];
+
+               $where = array('earning_total_id' => $get_last_earn_point[0]['earning_total_id']);
+               $this->general_model->update($this->earning_total_point, $com_data_total, $where);
+
+               $parent_available[] = $this->general_model->insert($this->earning_point,$com_data);
+            }else{
+               $com_data_total['user_id'] = $location_admins[0]['user_id'];
+               $com_data_total['com_name'] = $location_admins[0]['com_name'];
+               $com_data_total['client_points_totals'] = $point;
+               $this->general_model->insert($this->earning_total_point,$com_data_total);
+               $parent_available[] = $this->general_model->insert($this->earning_point,$com_data);
+            }
+
+        if( !empty($parent_available)){
+                    $message = [
+                        'status' => '1',
+                        'message' => 'interaction successfully done',
+                        'Earnpoint' =>$point,
+
+                    ];
+                    $this->response($message, REST_Controller::HTTP_OK);
+
+            }
+            else
+            {
+                $message = [
+                    'status' => '0',
+                    'message' => $this->lang->line('interaction_exist')
+                ];
+                $this->response($message, REST_Controller::HTTP_OK); // BAD_REQUEST (400) being the HTTP response code
+            }
+
+    }
+}
